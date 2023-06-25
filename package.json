@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "nodemon app.js"
   },
   "keywords": [],
   "author": "",
@@ -21,6 +21,7 @@
     "joi": "^17.9.2",
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.3.1",
+    "nodemailer": "^6.9.3",
     "rate-limiter": "^0.2.0",
     "xss-clean": "^0.1.4"
   },

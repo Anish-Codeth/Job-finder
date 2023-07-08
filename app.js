@@ -1,6 +1,11 @@
 const express=require('express')
 const app=express()
-const registerrouter=require('./routes/registerroutes')
+
+//error
+const notfoundMiddleware=require('./middleware/notfound')
+const errorMiddleware=require('./middleware/errorMiddleware')
+
+const companyrouter=require('./routes/companyroutes')
 const connectDB=require('./db/connect')
 
 //.env
@@ -9,8 +14,10 @@ require('dotenv').config()
 //for json
 app.use(express.json())
 
-app.use('/api/v1',registerrouter)
+app.use('/company',companyrouter)
 
+app.use(errorMiddleware)
+app.use(notfoundMiddleware)
 
 const start=async()=>{
 try{

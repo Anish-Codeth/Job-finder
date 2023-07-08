@@ -9,7 +9,7 @@ const company=await Company.create(req.body)
 res.status(StatusCodes.CREATED).json(company)
 }
 catch(err){
-    return res.status(StatusCodes.NOT_ACCEPTABLE).json({"msg":err._message})
+    return res.status(StatusCodes.NOT_ACCEPTABLE).json({"msg":err})
 }
 
 

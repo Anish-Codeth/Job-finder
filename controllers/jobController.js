@@ -1,25 +1,35 @@
 
 const {StatusCodes}=require('http-status-codes') 
 const Company=require('../models/companymodel')
-const customError=require('../errors/errors')
+const customError=require('../errors/classerror')
 const compress=require('../props/compress')
 const {Job,deleteJob}=require('../models/jobmodel')
 const { set } = require('mongoose')
 
 //to get all the jobs
 const getAllJobs=async(req,res)=>{
- 
+
   try{
-    const job=await Job.find({})
-    res.status(StatusCodes.OK).json(job)
+   let job=await Job.find({})
+   const company_job=await Promise.all(job.map(async (e)=>{
+    let company=await Company.findOne({"companyName":e.companyName})
+
+    companyDetail=company.toObject()
+    jobDetail=e.toObject()
+    return {companyDetail,jobDetail}
+   })
+   )
+    res.status(StatusCodes.OK).json(company_job)
   }
+
   catch(err){
-    res.json(err)
+    res.status(StatusCodes.BAD_REQUEST).json(err)
   }
 }
 
 //to create the job
 const createJobs=async(req,res)=>{
+
 
     try{
        const searchindex=(req.body.skills||'').join('')+(req.body.location.name||'')+(req.body.category||'')
@@ -31,6 +41,8 @@ const createJobs=async(req,res)=>{
         res.json(err)
     }
 }
+
+
 
 
 //For the query

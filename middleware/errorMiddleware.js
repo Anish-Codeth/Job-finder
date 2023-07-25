@@ -1,4 +1,4 @@
-const customError=require('../errors/errors')
+const customError=require('../errors/classerror')
 
 const errorMiddleware=(err,req,res,next)=>{
     console.log("inside middleware")

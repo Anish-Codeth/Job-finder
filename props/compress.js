@@ -8,17 +8,15 @@ async function resizeImage(bufferdata){
     
         try{
        const {width,height}=await sharp(bufferdata).metadata()
-       console.log(width)
-      const data=await sharp(bufferdata)
+      const data= await sharp(bufferdata)
       .resize({
         width:Math.floor(width/2),
         height:Math.floor(height/2)
       }).
       toFormat('jpeg').
       jpeg({ mozjpeg: true })
-      .toFile(path.resolve(__dirname,'../','./logo/upload.Jpg'))
-
-      resolve('hi')
+      // .toFile(path.resolve(__dirname,'../','./logo/upload.Jpg'))
+      resolve( data.toBuffer())
     }
     catch(err){
       reject('wrong commands ')

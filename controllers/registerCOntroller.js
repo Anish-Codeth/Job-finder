@@ -1,7 +1,7 @@
 const {createJWT,decodeJWT}=require('../props/createJWT')//to create and decode json web token
 const customError=require('../errors/classerror')
 const {StatusCodes}=require('http-status-codes')
-const User=require('../models/usermodel.js')
+const User=require('../models/usermodel.js')  
 const Token=require('../models/Tokenmodel')
 const sendmail=require('../props/nodemailer')
 const createcode=require('../props/createcode')
@@ -43,7 +43,12 @@ const emailverifyController=async(req,res)=>{
         //creation of the user
  
         const {email,password}=decodeJWT(token)
+        try{
         await User.create({email,password})
+        }
+        catch(err){
+            return res.status(StatusCodes.CREATED).json({"verified":false})
+        }
         return res.status(StatusCodes.CREATED).json({"verified":true})
     }
     else{

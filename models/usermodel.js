@@ -1,24 +1,83 @@
-const mongoose=require('mongoose')
-const bcrypt=require('bcryptjs')
+const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
 
-const userSchema=new mongoose.Schema({
-    "email":{
-        type:String,
-        required:[true,'please provide the email'],
-        unique:true
-    },
-    "password":{
-        type:String,
-        required:[true,'please provide the password']
-        }
-},{timestamps:true})
+const userSchema = new mongoose.Schema({
+  email: {
+    type: String,
+    required: [true, 'please provide the email'],
+    unique: true
+  },
+  password: {
+    type: String,
+    required: [true, 'please provide the password']
+  },
+  fullName:{
+      type:String,
+      required: [true,
+         'please provide the fullname']
+  },
+  completed: {
+    type: Number,
+  },
+  userName:{
+    unique: true,
+    type:String,
+    required: [true, 'please provide the username']
+  },
+  DOB:{
+    type:Date,
+  },
+  coverLetter:{
+    data:Buffer,
+    contentType:String
+  },
+  photo:{
+    data:Buffer,
+    contentType:String
+  },
+  cv:{
+    data:Buffer,
+    contentType:String
+  },
+  skills:[String],//chip
+  location: {
+    type:[Number,Number]
+  },
+  education:{
+    type:String  //dropdown
+  }, 
+  experience:{
+    type:String, //dropdown 
+  }
+}, { timestamps: true });
 
-userSchema.pre('save',async function(){
-const salt=await bcrypt.genSalt(10) //it returns the promise if u dont use callback
-this.password=await bcrypt.hash(this.password,salt)
-})
+// Move the counting function inside the userSchema.statics object
+userSchema.statics.counting = function (dict) {
+    let count = 0;
+    for (x in dict) {
+      if (dict[x] instanceof Object)
+          {
+            if(typeof dict[x].contentType==='string')
+            count++;
+            else
+        count = count + this.counting(dict[x]);
+
+           } // Use "this.counting" to call the static method
+      else
+        count += 1;
+    }
+    return count;
+  }
+  userSchema.post('findOneAndUpdate', function (docs) {
+    docs.completed=(docs.constructor.counting(docs.toObject())-1)/10
+  });
 
 
 
+userSchema.pre('save', async function () {
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+  this.completed = this.constructor.counting(this.toObject())/ 13; // Use "this.constructor.counting" to call the static method
+});
 
-module.exports=mongoose.model('User',userSchema)
+module.exports = mongoose.model('User', userSchema);

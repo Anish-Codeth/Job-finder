@@ -15,13 +15,15 @@ const connectDB=require('./db/connect')
 
 const bodyParser = require('body-parser');
 
+//for the data transfer
+app.use(express.json({ limit: '1mb' }));
+
 //.env
 require('dotenv').config()
 
 
 //
 app.get('/', (req, res) => {
-  console.log('hi')
   res.sendFile(path.resolve(__dirname,'./static/testing.html'))
 })
 
@@ -33,7 +35,7 @@ const cors=require('cors')
 app.use(cors())
 
 //for json
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: true}));
 app.use(bodyParser.json())
 
 
@@ -41,7 +43,7 @@ app.use(express.static('./static'))
 //for the routes
 app.use('/jobs',jobrouter)
 app.use('/company',companyrouter)
-// app.use('/',userrouter)
+app.use('/user',userrouter)
 app.use('/',authrouter);
 
 

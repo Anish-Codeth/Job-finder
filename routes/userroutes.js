@@ -2,8 +2,9 @@ const express=require('express')
 const router=express.Router()
 const multer=require('multer')
 const upload=multer()
-const { signUpController }=require('../controllers/userController')
+const { profileController,updateprofileController }=require('../controllers/userController')
  
-router.route('/signup').post(upload.single('profilePicture'),signUpController);
+router.route('/profile').get(profileController).patch(upload.fields([{name:'photo'},{name:'cv'}
+,{name:'coverLetter'}]),updateprofileController);
 
 module.exports=router;

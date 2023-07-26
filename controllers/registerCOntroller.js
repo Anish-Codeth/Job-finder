@@ -39,21 +39,23 @@ const emailverifyController=async(req,res)=>{
     const {code}=req.body
     const decodecode=createcode(token)
     console.log(decodecode)
+    try{
     if(Number(decodecode)==code){
         //creation of the user
  
         const {email,password}=decodeJWT(token)
-        try{
+        console.log('hi')
         await User.create({email,password})
-        }
-        catch(err){
-            return res.status(StatusCodes.CREATED).json({"verified":false})
-        }
+
         return res.status(StatusCodes.CREATED).json({"verified":true})
     }
     else{
         return res.status(StatusCodes.CREATED).json({'verified':false})
     }
+}
+catch(err){
+    throw new customError(StatusCodes.BAD_REQUEST,err) 
+}
 }
 
 

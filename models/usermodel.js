@@ -13,16 +13,12 @@ const userSchema = new mongoose.Schema({
   },
   fullName:{
       type:String,
-      required: [true,
-         'please provide the fullname']
   },
   completed: {
     type: Number,
   },
   userName:{
-    unique: true,
-    type:String,
-    required: [true, 'please provide the username']
+    type:String
   },
   DOB:{
     type:Date,

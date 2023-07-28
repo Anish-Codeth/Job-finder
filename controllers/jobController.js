@@ -4,7 +4,7 @@ const Company=require('../models/companymodel')
 const customError=require('../errors/classerror')
 const compress=require('../props/compress')
 const {Job,deleteJob}=require('../models/jobmodel')
-const { set } = require('mongoose')
+const {decodeJWT}=require('../props/createJWT')
 
 //to get all the jobs
 const getAllJobs=async(req,res)=>{
@@ -52,12 +52,16 @@ const getAllJobs=async(req,res)=>{
 //to create the job
 const createJobs=async(req,res)=>{
 
-
     try{
-       const searchindex=(req.body.skills||'').join('')+(req.body.location.name||'')+(req.body.category||'')
-       req.body.searchIndex=searchindex
-       const job=await Job.create(req.body)
-       res.status(StatusCodes.CREATED).json(job)
+      if(await Company.find({companyName:(req.body.companyName).toLowerCase()})){
+        res.status(StatusCodes.BAD_REQUEST).json({err:`no company with name=${req.body.companyName}`})
+      }
+      else{
+        const searchindex=(req.body.skills||'').join('')+(req.body.location.name||'')+(req.body.category||'')
+        req.body.searchIndex=searchindex
+        const job=await Job.create(req.body)
+        res.status(StatusCodes.CREATED).json(job) 
+      }
     }
     catch(err){
         res.json(err)
@@ -69,11 +73,14 @@ const createJobs=async(req,res)=>{
 
 //For the query
 const jobQueries=async(req,res)=>{
-
+    const auth=req.headers.authorization
     const {sort,category,jobLevel,location,recommendation,id,search}=req.query
     let makequery={}
     let queries  //for the sort
-    const [longitude,latitude]=[70,89] //you will get this data from the userdata 
+    const {email}=decodeJWT(auth)//kjkj
+    const user=User.findOne({email})
+    const [longitude,latitude]=user.location//you will get this data from the userdata 
+    let a=user.skills
     const page=Number(req.query.page)||1
     const limit=Number(req.query.limit)||4
 
@@ -118,7 +125,7 @@ const jobQueries=async(req,res)=>{
     }
  //must connect with user
     if(recommendation){
-      let a=['express','flask','bonjour','c++','api']
+     
       let job=await Job.find({})//you need to filter the search by one of user skills for the data
   
       job=job.map((e)=>{

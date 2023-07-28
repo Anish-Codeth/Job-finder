@@ -5,7 +5,6 @@ const customError=require('../errors/classerror')
 const {decodeJWT}=require('../props/createJWT')
 
 const profileController=async(req,res)=>{
-  console.log('inside the signup');
   try{
     const token=req.headers.authorization.split(' ')[1];
     const {email}=decodeJWT(token);

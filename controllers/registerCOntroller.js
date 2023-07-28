@@ -170,22 +170,6 @@ const resetpasswordController=async(req,res)=>{
     await sendmail(email,'Password reset success!').catch((err)=>{throw new customError(StatusCodes.BAD_REQUEST,err)})
     await Token.deleteOne({"userId":id})
     res.status(StatusCodes.OK).json({newPassword})
-    
-
-    
-    // let {hash:_id}=req.forgot
-    // const {password}=req.body
-    // if(!_id || !password){
-    //     throw new customError(StatusCodes.BAD_REQUEST,"not validated url")
-    // }
-    // const user=await User.findById({"_id":_id})
-    // if(user){
-    //       await User.findByIdAndUpdate({"_id":_id},{password})
-    //       res.status(StatusCodes.OK).json({"msg":"Created"})
-    // }
-    // else{
-    //     throw new customError(StatusCodes.BAD_REQUEST,"Given user is not registered")
-    // }
 }
 
 module.exports={

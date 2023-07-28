@@ -1,28 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Show Image</title>
+  <title>Reset password</title>
 </head>
 <body>
-  <h1>Show Image from MongoDB</h1>
-  
-  <div id="imageContainer"></div>
+  <h1>Reset password</h1>
+
+  <form action="">
+    <label for="password">Password</label>
+     <input type="password" name="" id="password">
+    <input type="password" name="" id="">
+  </form>
 
   <script>
-    window.addEventListener('DOMContentLoaded', () => {
-      const imageContainer = document.getElementById('imageContainer');
-
-      fetch('http://localhost:3000/company')
-        .then(response => response.json())
-        .then(data => {
-          const imgElement = document.createElement('img');
-          imgElement.src = `data:${data.contentType};base64,${data.data}`;
-          imageContainer.appendChild(imgElement);
-        })
-        .catch(error => {
-          console.error(error);
-        });
-    });
   </script>
 </body>
 </html>

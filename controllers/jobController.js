@@ -5,6 +5,7 @@ const customError=require('../errors/classerror')
 const compress=require('../props/compress')
 const {Job,deleteJob}=require('../models/jobmodel')
 const {decodeJWT}=require('../props/createJWT')
+const User=require('../models/usermodel')
 
 //to get all the jobs
 const getAllJobs=async(req,res)=>{
@@ -31,8 +32,6 @@ const getAllJobs=async(req,res)=>{
 
    const company_job=await Promise.all(job.map(async (e)=>{
     let company=await Company.findOne({"companyName":e.companyName})
-
-
     companyDetail=company.toObject()
     jobDetail=e.toObject()
     return {companyDetail,jobDetail}
@@ -73,16 +72,23 @@ const createJobs=async(req,res)=>{
 
 //For the query
 const jobQueries=async(req,res)=>{
-    const auth=req.headers.authorization
+  console.log('inside jobqueries')
+  try{
+    const auth=req.headers.authorization.split(' ')[1]
+    console.log(auth)
     const {sort,category,jobLevel,location,recommendation,id,search}=req.query
+    
     let makequery={}
     let queries  //for the sort
     const {email}=decodeJWT(auth)//kjkj
-    const user=User.findOne({email})
+    console.log(email)
+    const user=await User.findOne({email})
     const [longitude,latitude]=user.location//you will get this data from the userdata 
     let a=user.skills
     const page=Number(req.query.page)||1
     const limit=Number(req.query.limit)||4
+
+
 
     if(id){
       makequery._id=id
@@ -143,10 +149,40 @@ const jobQueries=async(req,res)=>{
     
     
     
-    try{
+  
+  
+
          const job=await Job.find(makequery).sort(queries).limit(limit).skip((page-1)*limit)
-         res.status(StatusCodes.CREATED).json(job) 
-    }
+        
+         
+         const jobTimeLength={
+          remote:0,
+          fulltime:0,
+          parttime:0
+         }
+         job.filter(e=>{
+          if(e.jobTime){      
+            if(e.jobTime=='remote')
+          jobTimeLength.remote+=1;
+          else if(e.jobTime=='fulltime')
+          jobTimeLength.fulltime+=1
+          else if(e.parttime=='parttime')
+          jobTimeLength.parttime+=1
+          }
+         })
+
+         const company_job=await Promise.all(job.map(async (e)=>{
+          let company=await Company.findOne({"companyName":e.companyName})
+          companyDetail=company.toObject()
+          jobDetail=e.toObject()
+          return {companyDetail,jobDetail}
+         })
+
+         )
+
+
+         res.status(StatusCodes.CREATED).json({company_job,jobTimeLength}) 
+  }
     catch(err){
         return res.json(err.message)
     }

@@ -1,18 +1,36 @@
 <!DOCTYPE html>
 <html>
 <head>
+   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Reset password</title>
 </head>
 <body>
   <h1>Reset password</h1>
 
   <form action="">
-    <label for="password">Password</label>
-     <input type="password" name="" id="password">
-    <input type="password" name="" id="">
+    <div>
+    <p><label for="password">Password:</label></p>
+    <input type="password" name="password" id="password" required>
+  </div>
+
+  <div>
+    <p><label for="cpassword">Confirm Password:</label></p>
+    <input type="password" name="cpassword" id="cpassword" required>
+  </div>
+  <hr>
+  <div>
+    <input type="submit" value="Submit" onclick="customReset()">
+  </div>
   </form>
 
-  <script>
-  </script>
+  
 </body>
+
+<script>
+  function customReset() {
+
+  }
+</script>
 </html>
+

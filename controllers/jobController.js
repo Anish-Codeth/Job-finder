@@ -35,12 +35,13 @@ const getAllJobs=async(req,res)=>{
 
     companyDetail=company.toObject()
     jobDetail=e.toObject()
-   console.log(companyDetail,jobDetail,jobTimeLength)
     return {companyDetail,jobDetail}
    })
    )
+
    company_job.jobTimeLength=jobTimeLength
-    res.status(StatusCodes.OK).json(company_job)
+   console.log(jobTimeLength)
+    res.status(StatusCodes.OK).json({company_job,jobTimeLength})
   }
 
   catch(err){

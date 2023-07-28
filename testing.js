@@ -1,4 +1,2 @@
-if(undefined)
-console.log("df")
-else
-console.log("ggh")
+y="anish"
+console.log({y:y})

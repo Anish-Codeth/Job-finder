@@ -61,7 +61,7 @@ const jobschema = new mongoose.Schema({
     }
   },
   jobTime:{
-    type:[String]
+    type:String
   },
   requirements:[String]
   

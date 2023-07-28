@@ -21,3 +21,6 @@ skills:{
     default:['js','python','node.js','teaching','bus driving','car driving','pilot','cleaning','linux','flutter','unity','c#','go']
 }
 })
+
+
+module.exports=mongoose.model('Data',dataschema)

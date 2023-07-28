@@ -13,10 +13,24 @@ const getAllJobs=async(req,res)=>{
    let job=await Job.find({})
    const company_job=await Promise.all(job.map(async (e)=>{
     let company=await Company.findOne({"companyName":e.companyName})
+     const length={
+      remote:0,
+      fulltime:0,
+      parttime:0
+     }
 
+     company_job.filter(e=>{
+      if(e.jobTime=='remote')
+      length.remote+=1;
+      else if(e.jobTime=='fulltime')
+      length.fulltime+=1
+      else
+      length.parttime+=1
+     })
     companyDetail=company.toObject()
     jobDetail=e.toObject()
-    return {companyDetail,jobDetail}
+
+    return {companyDetail,jobDetail,jobTimeLength}
    })
    )
     res.status(StatusCodes.OK).json(company_job)

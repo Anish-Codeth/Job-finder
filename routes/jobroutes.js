@@ -3,14 +3,12 @@ const router=express.Router()
 const multer=require('multer')
 const upload=multer()
 const {getAllJobs,createJobs, jobQueries}=require('../controllers/jobController')
+const auth=require('../middleware/auth')
  
-// router.route('/details').post(upload.single('logo'),companyController)
-// router.route('/details/:companyName').get(getCompanies)
-// router.route('/jobs').get(getjobs)
 
-router.route('/').get(getAllJobs)
+router.route('/').get(auth,getAllJobs)
 router.route('/create').post(createJobs)
-router.route('/query?').get(jobQueries)
+router.route('/query?').get(auth,jobQueries)
 
 
 module.exports=router;

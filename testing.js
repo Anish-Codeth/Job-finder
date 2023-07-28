@@ -1,1 +1,4 @@
-console.log(typeof "ss"=='string')
+if(undefined)
+console.log("df")
+else
+console.log("ggh")

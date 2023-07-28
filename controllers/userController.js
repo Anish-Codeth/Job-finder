@@ -38,7 +38,6 @@ const updateprofileController=async(req,res)=>{
         }
 
        }
-
        const user=await User.findOneAndUpdate({email},req.body,{new:true})
         res.status(StatusCodes.OK).json(user);
   }

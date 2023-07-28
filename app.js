@@ -2,7 +2,7 @@ const express=require('express')
 const app=express()
 const path=require('path')
 require('express-async-errors');
-
+const authorization=require('./middleware/auth')
 //error
 const notfoundMiddleware=require('./middleware/notfound')
 const errorMiddleware=require('./middleware/errorMiddleware')
@@ -41,7 +41,7 @@ app.use(bodyParser.json())
 
 app.use(express.static('./static'))
 //for the routes
-app.use('/jobs',jobrouter)
+app.use('/jobs',authorization,jobrouter)
 app.use('/company',companyrouter)
 app.use('/user',userrouter)
 app.use('/',authrouter);

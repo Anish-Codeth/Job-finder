@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const Data=require('../models/datamodel')
 
 const userSchema = new mongoose.Schema({
   email: {
@@ -21,7 +22,7 @@ const userSchema = new mongoose.Schema({
     type:String
   },
   DOB:{
-    type:Date,
+    type:String,
   },
   coverLetter:{
     data:Buffer,
@@ -37,7 +38,7 @@ const userSchema = new mongoose.Schema({
   },
   skills:[String],//chip
   location: {
-    type:[Number,Number]
+    type:[Number,Number] 
   },
   education:{
     type:String  //dropdown
@@ -76,4 +77,19 @@ userSchema.pre('save', async function () {
   this.completed = this.constructor.counting(this.toObject())/ 13; // Use "this.constructor.counting" to call the static method
 });
 
+
+//to comapare the data if it exists
+userSchema.pre('save',async function()
+{
+
+  const data=await Data.find({})
+  if(data.education.match(this.education))
+  {
+  }
+  else{
+     
+  }
+
+
+})
 module.exports = mongoose.model('User', userSchema);

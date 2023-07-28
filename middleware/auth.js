@@ -1,4 +1,4 @@
-const customError=require('./errorMiddleware')
+const customError=require('../errors/classerror')
 const {decodeJWT}=require('../props/createJWT')
 const User=require('../models/usermodel')
 const { StatusCodes } = require('http-status-codes')
@@ -10,22 +10,22 @@ const auth=async(req,res,next)=>{
     }
 
     const token=req.headers.authorization.split(' ')[1]
-    console.log(token)
 
     const {email}=decodeJWT(token)
     console.log(email)
     try{
-    const user=await User.findOne({email})
-    if(user)
+    const user=await User.find({email})
+    if(user.length==1)
     {
-        next()
         console.log('auth passed');
+        next()
     }
     else{
-      throw new customError(StatusCodes.BAD_REQUEST,'You are not accesed')
-    }}
+        return res.status(StatusCodes.BAD_REQUEST).json('not accessed')
+    }
+}
     catch(err){
-        return res.json(err)
+        throw new customError(StatusCodes.BAD_REQUEST,'error ')
     }
 }
 

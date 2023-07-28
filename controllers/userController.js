@@ -10,7 +10,7 @@ const profileController=async(req,res)=>{
     const token=req.headers.authorization.split(' ')[1];
     const {email}=decodeJWT(token);
     console.log(email)
-    const user=await User.findOne({email})
+    const user=await User.findOne({email}).select('-password')
     return res.status(StatusCodes.OK).json(user);
     }
     catch(err){

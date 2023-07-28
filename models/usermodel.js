@@ -79,17 +79,8 @@ userSchema.pre('save', async function () {
 
 
 //to comapare the data if it exists
-userSchema.pre('save',async function()
-{
-
-  const data=await Data.find({})
-  if(data.education.match(this.education))
-  {
-  }
-  else{
-     
-  }
-
-
-})
+// userSchema.pre('save',async function()
+// {
+// const data=await Data.find({})
+// })
 module.exports = mongoose.model('User', userSchema);

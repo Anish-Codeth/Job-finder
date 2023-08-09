@@ -28,7 +28,24 @@
 </body>
 
 <script>
-  function customReset() {
+ async function customReset() {
+          //  const token=await fetch("http://localhost:3000/forgot?",
+          
+          //  )
+          //  const data=await token.json();
+           
+          //  alert(data)
+            await fetch("http://localhost:3000/forgot?",
+            {
+              method:"PATCH",
+              mode:'cors',
+              headers:{
+                "Content-Type":"application/json"
+              }, 
+              body:{
+                "password":document.getElementById("cpassword").value()
+              },
+            })
 
   }
 </script>

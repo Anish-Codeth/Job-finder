@@ -65,7 +65,7 @@ const jobschema = new mongoose.Schema({
   },
   requirements:[String]
   
-});
+},{timestamps:true});
 
 jobschema.index({ location: '2dsphere' }, function(err,noerr) {
   console.log(err,noerr);

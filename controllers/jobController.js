@@ -52,14 +52,15 @@ const getAllJobs=async(req,res)=>{
 const createJobs=async(req,res)=>{
 
     try{
+      console.log(req.body.companyName.toLowerCase())
       if(await Company.find({companyName:(req.body.companyName).toLowerCase()})){
-        res.status(StatusCodes.BAD_REQUEST).json({err:`no company with name=${req.body.companyName}`})
-      }
-      else{
-        const searchindex=(req.body.skills||'').join('')+(req.body.location.name||'')+(req.body.category||'')
+        const searchindex=(req.body.skills||'').join('')+(req.body.location.name||'')+(req.body.category||'')+(req.body.companyName)+(req.body.jobTime)
         req.body.searchIndex=searchindex
         const job=await Job.create(req.body)
         res.status(StatusCodes.CREATED).json(job) 
+      }
+      else{
+        res.status(StatusCodes.BAD_REQUEST).json({err:`no company with name=${req.body.companyName}`})
       }
     }
     catch(err){
@@ -126,8 +127,9 @@ const jobQueries=async(req,res)=>{
          }
       }
    ] ).limit(limit).skip((page-1)*limit)
-
-   return res.json(job)
+   
+   const company_job=await queriesadd(job)
+   return res.json(company_job)
     }
  //must connect with user
     if(recommendation){
@@ -141,20 +143,15 @@ const jobQueries=async(req,res)=>{
         e.recommendationper=(listjob.length-setjob.size)/e.skills.length*100
         return e
       })
-      job.sort(function(a,b){return -a.recommendationper+b.recommendationper}) //if(!(value))
-      return res.json(job.slice((page-1)*limit,page*limit))
+      job.sort(function(a,b){return -a.recommendationper+b.recommendationper}).slice((page-1)*limit,page*limit) //if(!(value))
+
+      const company_job=await queriesadd(job)
+      return res.json(company_job)
 
     } //think if it must be in seperate page or not because it needs its own query
     //pagination must be done
     
-    
-    
-  
-  
-
-         const job=await Job.find(makequery).sort(queries).limit(limit).skip((page-1)*limit)
-        
-         
+         const job=await Job.find(makequery).sort(queries).limit(limit).skip((page-1)*limit)         
          const jobTimeLength={
           remote:0,
           fulltime:0,
@@ -171,16 +168,16 @@ const jobQueries=async(req,res)=>{
           }
          })
 
-         const company_job=await Promise.all(job.map(async (e)=>{
-          let company=await Company.findOne({"companyName":e.companyName})
-          companyDetail=company.toObject()
-          jobDetail=e.toObject()
-          return {companyDetail,jobDetail}
-         })
+        //  const company_job=await Promise.all(job.map(async (e)=>{
+        //   let company=await Company.findOne({"companyName":e.companyName})
+        //   companyDetail=company.toObject()
+        //   jobDetail=e.toObject()
+        //   return {companyDetail,jobDetail}
+        //  })
 
-         )
+        //  )
 
-
+        const company_job=await queriesadd(job)
          res.status(StatusCodes.CREATED).json({company_job,jobTimeLength}) 
   }
     catch(err){
@@ -190,6 +187,33 @@ const jobQueries=async(req,res)=>{
 }
 
 
+async function queriesadd(job)
+{
+  const jobTimeLength={
+    remote:0,
+    fulltime:0,
+    parttime:0
+   }
+   job.filter(e=>{
+    if(e.jobTime){      
+      if(e.jobTime=='remote')
+    jobTimeLength.remote+=1;
+    else if(e.jobTime=='fulltime')
+    jobTimeLength.fulltime+=1
+    else if(e.parttime=='parttime')
+    jobTimeLength.parttime+=1
+    }
+   })
+
+   const company_job=await Promise.all(job.map(async (e)=>{
+    let company=await Company.findOne({"companyName":e.companyName})
+    companyDetail=company.toObject()
+    jobDetail=e
+    return {companyDetail,jobDetail}
+   })
+   )
+   return {company_job,jobTimeLength}
+}
 
 
 module.exports={

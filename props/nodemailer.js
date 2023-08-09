@@ -1,21 +1,21 @@
 var nodemailer = require('nodemailer');
-
+require('dotenv').config()
 
 const emailVerification=async (gmail_id,code)=>{
 return new Promise(async (resolve,reject)=>{
 var transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'pas077bct006@wrc.edu.np',
-    pass: 'codeth333@'
+    user: process.env.GMAIL,
+    pass: process.env.PASSWORD
   }
 });
 
 var mailOptions = {
-  from: 'pas077bct006@wrc.edu.np',
+  from: process.env.GMAIL,
   to: gmail_id,
   subject: 'Verification code',
-  html: `<h1>code</h1>${code}`  //write here javascript code for verification
+  html: `<h1>${code}</h1>`  //write here javascript code for verification
 };
 
 try{

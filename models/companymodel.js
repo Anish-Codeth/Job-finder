@@ -34,7 +34,7 @@ const companySchema=new mongoose.Schema({
     },
         websiteLink:String
     }
-}
+},{timestamps:true}
 )
 
 module.exports=mongoose.model('COMPANY',companySchema)

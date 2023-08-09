@@ -23,9 +23,9 @@ require('dotenv').config()
 
 
 //
-app.get('/', (req, res) => {
-  res.sendFile(path.resolve(__dirname,'./static/testing.html'))
-})
+// app.get('/', (req, res) => {
+//   res.sendFile(path.resolve(__dirname,'./static/testing.html'))
+// })
 
 // for automatic
 const {task_p2o,task_delete}=require('./props/automatic')

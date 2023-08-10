@@ -38,15 +38,20 @@ const emailverifyController=async(req,res)=>{
     const token=req.headers.authorization.split(' ')[1]
     const {code}=req.body
     const decodecode=createcode(token)
-    console.log(decodecode)
+    // console.log(decodecode)
     try{
     if(Number(decodecode)==code){
         //creation of the user
  
         const {email,password}=decodeJWT(token)
-        console.log('hi')
+        
+        try{
         await User.create({email,password})
-
+        }
+        catch(err)
+        {
+            console.log(err)
+        }
         return res.status(StatusCodes.CREATED).json({"verified":true})
     }
     else{
@@ -135,7 +140,7 @@ const requestresetpasswordController=async(req,res)=>{
         token:hash  //here u must save resettoken
     })
         const link=`${process.env.CLIENT_URL}/forgot?hash=${hash}&id=${user._id}`
-
+        console.log(link)
         const template=await templateforreset(link)
         await sendmail(email,template).catch((err)=>{throw new customError(StatusCodes.BAD_REQUEST,err)})
         res.status(StatusCodes.OK).json({"link":link})
@@ -148,25 +153,25 @@ const requestresetpasswordController=async(req,res)=>{
 
 
 
+
 //for the updating of the reseting password
 const resetpasswordController=async(req,res)=>{
-    console.log('hi')
-    console.log(req.query)
-    if(!req.query.hash||!req.query.id||!req.body.newPassword)
-    throw new customError(StatusCodes.BAD_REQUEST,'Error not come')
+    if(!req.query.hash||!req.query.id||!req.body.password)
+    throw new customError(StatusCodes.BAD_REQUEST,'Error come')
+
     const {hash,id}=req.query
-    let {newPassword}=req.body
+    let {password:newPassword}=req.body
 
     const resettoken=await Token.findOne({"userId":id,"token":hash});
 
-    console.log(resettoken)
+
     if(!resettoken){
         throw new Error("Invalid id or code")
     }
     newPassword=await encodePassword(newPassword)
     await User.findByIdAndUpdate({"_id":id},{"password":newPassword})
     const {email}=await User.findOne({"_id":id})
-    console.log(email)
+
     await sendmail(email,'Password reset success!').catch((err)=>{throw new customError(StatusCodes.BAD_REQUEST,err)})
     await Token.deleteOne({"userId":id})
     res.status(StatusCodes.OK).json({newPassword})

@@ -20,34 +20,63 @@
   </div>
   <hr>
   <div>
-    <input type="submit" value="Submit" onclick="customReset()">
+    <input type="submit" value="Submit" onclick="customReset(event)">
   </div>
   </form>
 
-  
-</body>
+  <div id="success">
 
-<script>
- async function customReset() {
-          //  const token=await fetch("http://localhost:3000/forgot?",
-          
-          //  )
-          //  const data=await token.json();
-           
-          //  alert(data)
-            await fetch("http://localhost:3000/forgot?",
-            {
-              method:"PATCH",
-              mode:'cors',
-              headers:{
-                "Content-Type":"application/json"
-              }, 
-              body:{
-                "password":document.getElementById("cpassword").value()
-              },
-            })
+  </div>
+ 
+  <script >
 
+async function customReset(event) {
+    //  const token=await fetch("http://localhost:3000/forgot?",
+    
+    //  )
+    //  const data=await token.json();
+     
+    //  alert(data)
+    var link="http://localhost:3000"
+
+    event.preventDefault();
+    let url=new URL(window.location.href);
+    url=url.searchParams;
+    const hash=url.get('hash');
+    const id=url.get('id');
+    if(document.getElementById("password").value!=document.getElementById("cpassword").value){
+    alert("password doesnt match")
+    document.getElementById('password').value=''
+    document.getElementById('cpassword').value=''
+    return 
+    }
+
+      try {
+  const response = await fetch(`${link}/forgot?hash=${hash}&id=${id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      password: document.getElementById('password').value
+    })
+  });
+
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
   }
-</script>
+
+  const data = await response.json();
+  document.getElementById('password').value=''
+    document.getElementById('cpassword').value=''
+  document.getElementById('success').innerHTML="Reset success"
+  // Do something with the response data
+} catch (error) {
+  console.error('Error:', error);
+}
+
+}
+  </script>
+</body>
 </html>
 

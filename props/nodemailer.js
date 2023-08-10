@@ -24,7 +24,7 @@ resolve('email sent')
 }
 catch(err)
 {
-reject("Email couln't be sent")
+reject(err)
 }
 })
 }

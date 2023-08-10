@@ -82,9 +82,10 @@ userSchema.pre('save', async function () {
 userSchema.pre('save',async function()
 {
 const x=['education','experience','skills']
-for (y in x){
+
+for (let y in x){
 const data=await Data.find({})
-if(!data[y].includes(this[y]))
+if(data.length==0 && !data[y].includes(this[y]))
 {
   const dataedu=data[y]
   dataedu.push(this[y])
@@ -94,7 +95,7 @@ if(!data[y].includes(this[y]))
   await Data.findOneAndUpdate({y},{y:dataedu})
 
 }
-
 }
 })
+
 module.exports = mongoose.model('User', userSchema);

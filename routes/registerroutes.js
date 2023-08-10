@@ -9,8 +9,9 @@ router.route('/verification').post(emailverifyController)
 router.route('/login').post(loginController)
 router.route('/updatepassword').patch(authMiddleware,updatePasswordController)
 router.route('/forgot').post(requestresetpasswordController)
+
 router.route('/forgot?').patch(resetpasswordController).get((req,res)=>{
-    return res.sendFile(path.resolve(__dirname,'../static/testing.html'))
+    return res.sendFile(path.resolve(__dirname,'../static/testing.html'))   
 }
 )
 

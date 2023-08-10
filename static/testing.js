@@ -1,0 +1,4 @@
+function customReset()
+{
+    alert("hi")
+}

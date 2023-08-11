@@ -52,7 +52,7 @@ const emailverifyController=async(req,res)=>{
         {
             console.log(err)
         }
-        console.log(u)
+        
         return res.status(StatusCodes.CREATED).json({"verified":true})
     }
     else{

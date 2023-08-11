@@ -46,7 +46,7 @@ const emailverifyController=async(req,res)=>{
         const {email,password}=decodeJWT(token)
         
         try{
-        const u=await User.create({email,password})
+        await User.create({email,password})
         }
         catch(err)
         {

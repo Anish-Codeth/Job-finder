@@ -79,23 +79,23 @@ userSchema.pre('save', async function () {
 
 
 //to comapare the data if it exists
-userSchema.pre('save',async function()
-{
-const x=['education','experience','skills']
+// userSchema.pre('save',async function()
+// {
+// const x=['education','experience','skills']
 
-for (let y in x){
-const data=await Data.find({})
-if(data.length==0 && !data[y].includes(this[y]))
-{
-  const dataedu=data[y]
-  dataedu.push(this[y])
-  let a={
-    y:dataedu
-  }
-  await Data.findOneAndUpdate({y},{y:dataedu})
+// for (let y in x){
+// const data=await Data.find({})
+// if(data.length==0 && !data[y].includes(this[y]))
+// {
+//   const dataedu=data[y]
+//   dataedu.push(this[y])
+//   let a={
+//     y:dataedu
+//   }
+//   await Data.findOneAndUpdate({y},{y:dataedu})
 
-}
-}
-})
+// }
+// }
+// })
 
 module.exports = mongoose.model('User', userSchema);

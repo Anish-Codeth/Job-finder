@@ -46,12 +46,13 @@ const emailverifyController=async(req,res)=>{
         const {email,password}=decodeJWT(token)
         
         try{
-        await User.create({email,password})
+        const u=await User.create({email,password})
         }
         catch(err)
         {
             console.log(err)
         }
+        console.log(u)
         return res.status(StatusCodes.CREATED).json({"verified":true})
     }
     else{

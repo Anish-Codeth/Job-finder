@@ -166,24 +166,37 @@ const jobQueries=async(req,res)=>{
         //   }
         //  })
 
-         job.filter(e=>{
-          if(e.jobTime){      
-            if(e.jobTime=='remote')
-          jobTimeLength.remote+=1;
-          else if(e.jobTime=='fulltime')
-          jobTimeLength.fulltime+=1
-          else if(e.parttime=='parttime')
-          jobTimeLength.parttime+=1
+       
+          const jobTimeLength={
+           remote:0,
+           fulltime:0,
+           parttime:0
           }
-         })
-      
-         const company_job=await Promise.all(job.map(async (e)=>{
-          let company=await Company.findOne({"companyName":e.companyName})
-          companyDetail=company.toObject()
-          jobDetail=e.toObject()
-          return {companyDetail,jobDetail}
-         })
-         )
+       
+          job.filter(e=>{
+           if(e.jobTime){      
+             if(e.jobTime=='remote')
+           jobTimeLength.remote+=1;
+           else if(e.jobTime=='fulltime')
+           jobTimeLength.fulltime+=1
+           else if(e.parttime=='parttime')
+           jobTimeLength.parttime+=1
+           }
+          })
+       
+          const company_jobs=await Promise.all(job.map(async (e)=>{
+           let company=await Company.findOne({"companyName":e.companyName})
+           companyDetail=company.toObject()
+           jobDetail=e.toObject()
+           return {companyDetail,jobDetail}
+          })
+          )
+       
+          company_job.jobTimeLength=jobTimeLength
+          console.log(jobTimeLength)
+           res.status(StatusCodes.OK).json({company_jobs,jobTimeLength})
+        
+    
 
 
 

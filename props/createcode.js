@@ -1,4 +1,4 @@
-const createcode=(data)=>{
+const createcode=(data)=>{  
         data=data.split('.')[2].split('').filter(x=>!isNaN(Number(x))).join('')
         const Length=data.length
         if(Length>6){

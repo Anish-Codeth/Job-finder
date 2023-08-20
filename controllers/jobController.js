@@ -143,7 +143,7 @@ const jobQueries=async(req,res)=>{
       })
       job.sort(function(a,b){return -a.recommendationper+b.recommendationper}).slice((page-1)*limit,page*limit) //if(!(value))
 
-      const company_job=await queriesadd(job)
+      let company_job=await queriesadd(job)
       return res.json(company_job)
 
     } //think if it must be in seperate page or not because it needs its own query
@@ -167,51 +167,45 @@ const jobQueries=async(req,res)=>{
         //  })
 
        
-          const jobTimeLength={
-           remote:0,
-           fulltime:0,
-           parttime:0
-          }
-       
-          job.filter(e=>{
-           if(e.jobTime){      
-             if(e.jobTime=='remote')
-           jobTimeLength.remote+=1;
-           else if(e.jobTime=='fulltime')
-           jobTimeLength.fulltime+=1
-           else if(e.parttime=='parttime')
-           jobTimeLength.parttime+=1
-           }
-          })
-       
-          const company_jobs=await Promise.all(job.map(async (e)=>{
-           let company=await Company.findOne({"companyName":e.companyName})
-           companyDetail=company.toObject()
-           jobDetail=e.toObject()
-           return {companyDetail,jobDetail}
-          })
-          )
-       
-          company_job.jobTimeLength=jobTimeLength
-          console.log(jobTimeLength)
-           res.status(StatusCodes.OK).json({company_jobs,jobTimeLength})
         
     
-
-
-
         //  const company_job=await Promise.all(job.map(async (e)=>{
         //   let company=await Company.findOne({"companyName":e.companyName})
         //   companyDetail=company.toObject()
         //   jobDetail=e.toObject()
         //   return {companyDetail,jobDetail}
         //  })
-
         //  )
-
-        const company_job=await queriesadd(job)
-         res.status(StatusCodes.CREATED).json({company_job,jobTimeLength}) 
-  }
+        const jobTimeLength={
+          remote:0,
+          fulltime:0,
+          parttime:0
+         }
+      
+         job.filter(e=>{
+          if(e.jobTime){      
+            if(e.jobTime=='remote')
+          jobTimeLength.remote+=1;
+          else if(e.jobTime=='fulltime')
+          jobTimeLength.fulltime+=1
+          else if(e.parttime=='parttime')
+          jobTimeLength.parttime+=1
+          }
+         })
+      
+         const company_job=await Promise.all(job.map(async (e)=>{
+          let company=await Company.findOne({"companyName":e.companyName})
+          companyDetail=company.toObject()
+          jobDetail=e.toObject()
+          return {companyDetail,jobDetail}
+         })
+         )
+      
+         company_job.jobTimeLength=jobTimeLength
+         console.log(jobTimeLength)
+          res.status(StatusCodes.OK).json({company_job,jobTimeLength})
+        }
+  
     catch(err){
         return res.json(err.message)
     }

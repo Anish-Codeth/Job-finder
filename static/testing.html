@@ -4,9 +4,82 @@
    <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Reset password</title>
+
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .container {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .title {
+      text-align: center;
+      color: #333;
+    }
+    
+    .password-form {
+      margin-top: 20px;
+    }
+    
+    .form-group {
+      margin-bottom: 15px;
+    }
+    
+    label {
+      font-weight: bold;
+      color: #555;
+    }
+    
+    input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    
+    .divider {
+      margin-top: 20px;
+      border: none;
+      border-top: 1px solid #ddd;
+    }
+    
+    .submit-button {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    
+    .submit-button:hover {
+      background-color: #0056b3;
+    }
+    
+    .success-message {
+      margin-top: 20px;
+      text-align: center;
+      color: #0d6efd;
+      font-weight: bold;
+    }
+    </style>
 </head>
+
 <body>
-  <h1>Reset password</h1>
+  <!-- <h1>Reset password</h1>
 
   <form action="">
     <div>
@@ -26,17 +99,37 @@
 
   <div id="success">
 
-  </div>
+  </div> -->
  
+  <div class="container">
+    <h1 class="title">Reset Password</h1>
+
+    <form action="" class="password-form">
+      <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="password" name="password" id="password" required>
+      </div>
+
+      <div class="form-group">
+        <label for="cpassword">Confirm Password:</label>
+        <input type="password" name="cpassword" id="cpassword" required>
+      </div>
+
+      <hr class="divider">
+
+      <div class="form-group">
+        <input type="submit" value="Submit" onclick="customReset(event)" class="submit-button">
+      </div>
+    </form>
+
+    <div id="success" class="success-message">
+      <!-- Success message will be displayed here -->
+    </div>
+  </div>
   <script >
 
 async function customReset(event) {
-    //  const token=await fetch("http://localhost:3000/forgot?",
-    
-    //  )
-    //  const data=await token.json();
-     
-    //  alert(data)
+
     var link="https://tender-puce-swimsuit.cyclic.app"
 
     event.preventDefault();

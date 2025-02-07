@@ -1,3 +1,3 @@
-It has all the dependencies.
-Use npm install
+All the dependencies are here.
+Use npm install.
 
